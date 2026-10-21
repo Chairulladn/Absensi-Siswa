@@ -70,10 +70,12 @@ http://localhost/Absensi-Siswa/
 
 ## 👨‍💻 Developer
 
+<div align="center">
+
 **Built and maintained by Chairulladn**
 
-[![GitHub](https://img.shields.io/badge/GitHub-Visit%20Profile-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Chairulladn)
+[![GitHub Profile](https://img.shields.io/badge/GitHub-Visit%20Profile-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Chairulladn)
 
----
+<br>
 
-*Built with curiosity. Improved through experience.*
+*Built with curiosity. Improved through experimentation.*
