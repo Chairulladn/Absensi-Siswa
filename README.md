@@ -2,7 +2,7 @@
 
 ### Student Attendance Management System
 
-**A simple web-based student attendance management system built with PHP and MySQL, featuring a modern dark-themed interface.**
+**A simple web-based student attendance management system built with PHP and MySQL.**
 
 ![PHP](https://img.shields.io/badge/PHP-777BB4?style=for-the-badge&logo=php&logoColor=white)
 ![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
@@ -12,8 +12,6 @@
 ![Status](https://img.shields.io/badge/Status-Active%20Development-2ea44f?style=flat-square)
 
 ---
-
-*Making student attendance management simpler and more organized.*
 
 ## ✨ Overview
 
@@ -69,10 +67,6 @@ Start Apache and MySQL, place the project in your web server's document root, an
 ```text
 http://localhost/Absensi-Siswa/
 ```
-
-## 🔐 Security
-
-Keep database credentials, administrator passwords, and student information private. Never commit sensitive configuration files to a public repository.
 
 ## 👨‍💻 Developer
 
