@@ -77,5 +77,3 @@ http://localhost/Absensi-Siswa/
 ---
 
 *Built with curiosity. Improved through experience.*
-
-**If you find this project useful, consider giving it a ⭐!**
