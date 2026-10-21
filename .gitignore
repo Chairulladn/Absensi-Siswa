@@ -1,0 +1,19 @@
+# Konfigurasi database lokal
+/config/koneksi.php
+
+# File konfigurasi rahasia
+.env
+.env.*
+
+# File sistem dan editor
+.DS_Store
+Thumbs.db
+.vscode/
+
+# Log dan file sementara
+*.log
+*.tmp
+
+# Backup database
+*.sql
+*.sql.gz

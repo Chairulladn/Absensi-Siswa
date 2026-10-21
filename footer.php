@@ -1,3 +1,3 @@
-<div class="creator">
-    Designed & Developed by Chairuladnan
-</div>
+<?php
+
+require __DIR__ . "/includes/footer.php";

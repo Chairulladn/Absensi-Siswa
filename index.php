@@ -1,374 +1,218 @@
+
 <?php
+require_once "auth.php";
+require_once "koneksi.php";
 
-include "koneksi.php";
+date_default_timezone_set("Asia/Jakarta");
+$tanggalHariIni = date("Y-m-d");
 
-/* =========================
-   TOTAL ANGGOTA
-========================= */
 
-$query = mysqli_query(
+function ambilJumlah($koneksi, $sql, $parameter = [])
+{
+    $stmt = mysqli_prepare($koneksi, $sql);
+
+    if (!empty($parameter)) {
+        $tipe = str_repeat("s", count($parameter));
+        mysqli_stmt_bind_param($stmt, $tipe, ...$parameter);
+    }
+
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_bind_result($stmt, $jumlah);
+    mysqli_stmt_fetch($stmt);
+    mysqli_stmt_close($stmt);
+
+    return (int) $jumlah;
+}
+
+
+$totalSiswa = ambilJumlah(
     $koneksi,
-    "SELECT COUNT(*) AS total FROM karyawan"
+    "SELECT COUNT(*) FROM siswa"
 );
 
-$data = mysqli_fetch_assoc($query);
-
-$total_anggota = $data['total'];
-
-
-/* =========================
-   PENERIMAAN HARI INI
-========================= */
-
-$tanggal_hari_ini = date("Y-m-d");
-
-$query = mysqli_query(
+$hadir = ambilJumlah(
     $koneksi,
-    "SELECT COUNT(*) AS total
-     FROM absensi
-     WHERE tanggal = '$tanggal_hari_ini'"
+    "SELECT COUNT(*) FROM absensi
+     WHERE tanggal = ? AND status = 'Hadir'",
+    [$tanggalHariIni]
 );
 
-$data = mysqli_fetch_assoc($query);
-
-$total_hari_ini = $data['total'];
-
-
-/* =========================
-   TOTAL SELURUH PENERIMAAN
-========================= */
-
-$query = mysqli_query(
+$izin = ambilJumlah(
     $koneksi,
-    "SELECT COUNT(*) AS total
-     FROM absensi"
+    "SELECT COUNT(*) FROM absensi
+     WHERE tanggal = ? AND status = 'Izin'",
+    [$tanggalHariIni]
 );
 
-$data = mysqli_fetch_assoc($query);
-
-$total_penerimaan = $data['total'];
-
-
-/* =========================
-   AKTIVITAS TERBARU
-========================= */
-
-$query_terbaru = mysqli_query(
+$sakit = ambilJumlah(
     $koneksi,
-    "SELECT
-        absensi.tanggal,
-        absensi.waktu,
-        karyawan.nama,
-        karyawan.kategori_dansos
-     FROM absensi
-     INNER JOIN karyawan
-     ON absensi.anggota = karyawan.id
-     ORDER BY absensi.id DESC
-     LIMIT 5"
+    "SELECT COUNT(*) FROM absensi
+     WHERE tanggal = ? AND status = 'Sakit'",
+    [$tanggalHariIni]
 );
 
 
-/* =========================
-   KATEGORI DANSOS
-========================= */
-
-$query_kategori = mysqli_query(
+$alpa = ambilJumlah(
     $koneksi,
-    "SELECT
-        karyawan.kategori_dansos,
-        COUNT(absensi.id) AS jumlah
-     FROM absensi
-     INNER JOIN karyawan
-     ON absensi.anggota = karyawan.id
-     GROUP BY karyawan.kategori_dansos
-     ORDER BY jumlah DESC"
+    "SELECT COUNT(*) FROM absensi
+     WHERE tanggal = ? AND status = 'Alpa'",
+    [$tanggalHariIni]
 );
 
+
+$sudahAbsen = $hadir + $izin + $sakit + $alpa;
+$belumAbsen = max(0, $totalSiswa - $sudahAbsen);
+
+$persentase = $totalSiswa > 0
+    ? round(($hadir / $totalSiswa) * 100)
+    : 0;
+
+
+$stmt = mysqli_prepare($koneksi, "
+    SELECT
+        s.nama,
+        s.kelas,
+        a.status,
+        a.waktu
+    FROM absensi a
+    JOIN siswa s ON s.id = a.siswa_id
+    WHERE a.tanggal = ?
+    ORDER BY a.waktu DESC, a.id DESC
+    LIMIT 8
+");
+
+mysqli_stmt_bind_param($stmt, "s", $tanggalHariIni);
+mysqli_stmt_execute($stmt);
+
+$result = mysqli_stmt_get_result($stmt);
+
+$aktivitas = mysqli_fetch_all(
+    $result,
+    MYSQLI_ASSOC
+);
+
+mysqli_stmt_close($stmt);
 ?>
 
 <!DOCTYPE html>
-<html>
-
+<html lang="id">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Dashboard - Dansos PUK OMRON</title>
+    <title>Dashboard - Absensi Siswa</title>
 
-    <link rel="stylesheet" href="css/style.css?v=2">
-
+    <link rel="stylesheet" href="assets/css/dark.css?v=2">
 </head>
 
 <body>
 
 <div class="layout">
 
-    <!-- SIDEBAR -->
-
-    <aside class="sidebar">
-
-        <h2>Serah Terima Dansos</h2>
-
-        <nav>
-
-            <a href="index.php" class="active">
-                Dashboard
-            </a>
-
-            <a href="absen_rfid.php">
-                Scan RFID
-            </a>
-
-            <a href="karyawan.php">
-                Data Anggota
-            </a>
-
-            <a href="tambah_karyawan.php">
-                Tambah Anggota
-            </a>
-
-            <a href="absensi.php">
-                Riwayat Dansos
-            </a>
-
-            <a href="rekap.php">
-                Rekap & Export
-            </a>
-
-        </nav>
-
-    </aside>
-
-
-    <!-- KONTEN -->
+    <?php include "sidebar.php"; ?>
 
     <main class="content">
 
-        <h1>Dashboard</h1>
+        <?php include "topbar.php"; ?>
 
-        <p>
-            Monitoring Serah Terima Dansos PUK OMRON.
-        </p>
-
-
-        <!-- STATISTIK -->
-
-        <div class="dashboard-cards">
-
-
-            <!-- TOTAL ANGGOTA -->
-
-            <div class="dashboard-card">
-
-                <div class="dashboard-icon">
-                    👥
-                </div>
-
-                <div>
-
-                    <span class="dashboard-label">
-                        Total Anggota
-                    </span>
-
-                    <strong>
-                        <?php echo $total_anggota; ?>
-                    </strong>
-
-                </div>
-
+        <div class="dashboard-heading">
+            <div>
+                <h1>Dashboard</h1>
+                <p>Ringkasan aktivitas absensi siswa hari ini.</p>
             </div>
 
-
-            <!-- HARI INI -->
-
-            <div class="dashboard-card">
-
-                <div class="dashboard-icon">
-                    🎁
-                </div>
-
-                <div>
-
-                    <span class="dashboard-label">
-                        Penerimaan Hari Ini
-                    </span>
-
-                    <strong>
-                        <?php echo $total_hari_ini; ?>
-                    </strong>
-
-                </div>
-
-            </div>
-
-
-            <!-- TOTAL -->
-
-            <div class="dashboard-card">
-
-                <div class="dashboard-icon">
-                    📋
-                </div>
-
-                <div>
-
-                    <span class="dashboard-label">
-                        Total Penerimaan
-                    </span>
-
-                    <strong>
-                        <?php echo $total_penerimaan; ?>
-                    </strong>
-
-                </div>
-
-            </div>
-
-
+            <a href="absen_manual.php" class="dashboard-action">
+                + Input Absensi
+            </a>
         </div>
 
+        <div class="dashboard-stats">
 
-        <!-- DUA KOLOM -->
-
-        <div class="dashboard-grid">
-
-
-            <!-- AKTIVITAS TERBARU -->
-
-            <div class="dashboard-panel">
-
-                <div class="panel-header">
-
-                    <h2>Aktivitas Terbaru</h2>
-
-                    <a href="absensi.php">
-                        Lihat semua
-                    </a>
-
+            <div class="dashboard-stat">
+                <div class="stat-heading">
+                    <span>Total Siswa</span>
+                    <span class="stat-symbol stat-blue">▦</span>
                 </div>
-
-
-                <div class="activity-list">
-
-                    <?php if (mysqli_num_rows($query_terbaru) > 0) { ?>
-
-                        <?php while ($aktivitas = mysqli_fetch_assoc($query_terbaru)) { ?>
-
-                            <div class="activity-item">
-
-                                <div class="activity-time">
-
-                                    <?php
-                                    echo date(
-                                        "H:i",
-                                        strtotime($aktivitas['waktu'])
-                                    );
-                                    ?>
-
-                                </div>
-
-
-                                <div class="activity-info">
-
-                                    <strong>
-                                        <?php echo htmlspecialchars($aktivitas['nama']); ?>
-                                    </strong>
-
-                                    <span>
-                                        <?php echo htmlspecialchars($aktivitas['kategori_dansos']); ?>
-                                    </span>
-
-                                </div>
-
-                            </div>
-
-                        <?php } ?>
-
-                    <?php } else { ?>
-
-                        <div class="empty-data">
-                            Belum ada penerimaan.
-                        </div>
-
-                    <?php } ?>
-
-                </div>
-
+                <strong><?= $totalSiswa ?></strong>
+                <small>Terdaftar di sistem</small>
             </div>
 
-
-            <!-- KATEGORI -->
-
-            <div class="dashboard-panel">
-
-                <div class="panel-header">
-
-                    <h2>Kategori Dansos</h2>
-
+            <div class="dashboard-stat">
+                <div class="stat-heading">
+                    <span>Hadir Hari Ini</span>
+                    <span class="stat-symbol stat-green">✓</span>
                 </div>
-
-
-                <div class="category-list">
-
-                    <?php if (mysqli_num_rows($query_kategori) > 0) { ?>
-
-                        <?php while ($kategori = mysqli_fetch_assoc($query_kategori)) { ?>
-
-                            <div class="category-item">
-
-                                <span>
-                                    <?php echo htmlspecialchars($kategori['kategori_dansos']); ?>
-                                </span>
-
-                                <strong>
-                                    <?php echo $kategori['jumlah']; ?>
-                                </strong>
-
-                            </div>
-
-                        <?php } ?>
-
-                    <?php } else { ?>
-
-                        <div class="empty-data">
-                            Belum ada data kategori.
-                        </div>
-
-                    <?php } ?>
-
-                </div>
-
+                <strong><?= $hadir ?></strong>
+                <small>Siswa hadir</small>
             </div>
 
+            <div class="dashboard-stat">
+                <div class="stat-heading">
+                    <span>Izin Hari Ini</span>
+                    <span class="stat-symbol stat-yellow">◷</span>
+                </div>
+                <strong><?= $izin ?></strong>
+                <small>Siswa izin</small>
+            </div>
+
+            <div class="dashboard-stat">
+                <div class="stat-heading">
+                    <span>Sakit Hari Ini</span>
+                    <span class="stat-symbol stat-red">+</span>
+                </div>
+                <strong><?= $sakit ?></strong>
+                <small>Siswa sakit</small>
+            </div>
+
+            
+<div class="dashboard-stat">
+    <div class="stat-heading">
+        <span>Alpa Hari Ini</span>
+        <span class="stat-symbol stat-alpa">!</span>
+    </div>
+    <strong><?= $alpa ?></strong>
+    <small>Siswa alpa</small>
+</div>
+
+</div> <!-- Penutup dashboard-stats -->
+
+<div class="dashboard-grid">
+    <section class="dashboard-panel">
+
+
+                <div class="panel-heading">
+                    <div>
+                        <h2>Ringkasan Kehadiran</h2>
+                        <p>Statistik absensi hari ini</p>
+                    </div>
+                </div>
+
+                <div class="attendance-percentage">
+                    <?= $persentase ?>%
+                </div>
+
+                <div class="progress-track">
+                    <div
+                        class="progress-fill"
+                        style="width: <?= $persentase ?>%"
+                    ></div>
+                </div>
+
+                <div class="attendance-details">
+                    <div>
+                        <span>Sudah diabsen</span>
+                        <strong><?= $sudahAbsen ?></strong>
+                    </div>
+
+                    <div>
+                        <span>Belum diabsen</span>
+                        <strong><?= $belumAbsen ?></strong>
+                    </div>
+                </div>
+
+            </section>
 
         </div>
-
-
-        <!-- AKSES CEPAT -->
-
-        <div class="quick-dashboard">
-
-            <h2>Akses Cepat</h2>
-
-            <div class="quick-dashboard-buttons">
-
-                <a href="absen_rfid.php">
-                    🪪
-                    <span>Scan RFID</span>
-                </a>
-
-                <a href="karyawan.php">
-                    👥
-                    <span>Data Anggota</span>
-                </a>
-
-                <a href="rekap.php">
-                    📊
-                    <span>Rekap & Export</span>
-                </a>
-
-            </div>
-
-        </div>
-
 
         <?php include "footer.php"; ?>
 
@@ -376,6 +220,7 @@ $query_kategori = mysqli_query(
 
 </div>
 
-</body>
+<script src="assets/js/topbar.js?v=1"></script>
 
+</body>
 </html>

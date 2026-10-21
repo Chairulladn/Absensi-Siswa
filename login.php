@@ -56,16 +56,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <!DOCTYPE html>
 <html>
 
+
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Login Admin</title>
+    <title>Login Admin | Absensi Siswa</title>
 
-    <link
-        rel="stylesheet"
-        href="css/style.css?v=3"
-    >
-
+    <link rel="stylesheet" href="assets/css/dark.css?v=1">
+    <link rel="stylesheet" href="assets/css/login.css?v=1">
 </head>
+
 
 <body>
 
@@ -75,9 +76,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         <h1>Login Admin</h1>
 
-        <p>
-            Masuk untuk mengelola data anggota.
-        </p>
+            <p>
+            Masuk untuk mengelola sistem absensi siswa.
+            </p>
 
         <?php if ($pesan != "") { ?>
 

@@ -1,0 +1,126 @@
+
+/* LOGIN ADMIN - ABSENSI SISWA */
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: #0f1724;
+    color: #e8eef8;
+    font-family: Arial, sans-serif;
+}
+
+.login-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    box-sizing: border-box;
+    background:
+        radial-gradient(circle at 50% 0%, #1c3150, transparent 55%),
+        #0f1724;
+}
+
+.login-box {
+    width: 100%;
+    max-width: 390px;
+    padding: 36px;
+    box-sizing: border-box;
+    background: #1b2637;
+    border: 1px solid #303d50;
+    border-radius: 16px;
+    box-shadow: 0 18px 50px rgba(0, 0, 0, 0.28);
+    text-align: left;
+}
+
+.login-box h1 {
+    margin: 0 0 10px;
+    color: #f1f5f9;
+    font-size: 28px;
+    text-align: center;
+}
+
+.login-box > p {
+    margin: 0 0 28px;
+    color: #9eacc0;
+    font-size: 14px;
+    text-align: center;
+}
+
+.login-box form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.login-box label {
+    margin-top: 5px;
+    color: #cbd5e1;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.login-box input {
+    width: 100%;
+    padding: 13px 14px;
+    box-sizing: border-box;
+    background: #111b2a;
+    color: #f1f5f9;
+    border: 1px solid #35445b;
+    border-radius: 8px;
+    outline: none;
+    font-size: 14px;
+}
+
+.login-box input:focus {
+    border-color: #6489d8;
+    box-shadow: 0 0 0 3px rgba(100, 137, 216, 0.15);
+}
+
+.login-box button {
+    width: 100%;
+    margin-top: 12px;
+    padding: 13px;
+    background: #6489d8;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.login-box button:hover {
+    background: #789ce8;
+}
+
+.login-back {
+    display: block;
+    margin-top: 24px;
+    text-align: center;
+    color: #9bb8eb;
+    font-size: 13px;
+    text-decoration: none;
+}
+
+.login-back:hover {
+    color: #c4d7ff;
+}
+
+.login-error {
+    padding: 12px;
+    margin-bottom: 20px;
+    background: rgba(239, 68, 68, 0.12);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: #fca5a5;
+    border-radius: 8px;
+    font-size: 13px;
+    text-align: center;
+}
+
+@media (max-width: 480px) {
+    .login-box {
+        padding: 26px 22px;
+    }
+}
