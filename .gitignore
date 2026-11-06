@@ -17,3 +17,11 @@ Thumbs.db
 # Backup database
 *.sql
 *.sql.gz
+# JavaScript / Cloudflare
+node_modules/
+.wrangler/
+dist/
+.dev.vars
+.dev.vars.*
+!migrations/*.sql
+!.dev.vars.example

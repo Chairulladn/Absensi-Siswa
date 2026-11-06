@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#244cb4">
+  <title>Absensi Siswa</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./style.css">
+  <script type="module" src="./app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#view">Langsung ke isi</a>
+  <div class="shell">
+    <aside class="sidebar">
+      <a class="brand" href="#dashboard" aria-label="Absensi Siswa, beranda">
+        <svg class="brand-mark" viewBox="0 0 40 40" fill="none" aria-hidden="true"><rect width="40" height="40" rx="11" fill="currentColor"/><path d="M11 12h9v18h-9V12Zm9 0h9v18h-9M15 17h2m-2 5h2m6-5h2m-2 5h2" stroke="white" stroke-width="1.6" stroke-linecap="round"/><path d="m26 29 3 3 5-6" stroke="#b5d6ff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>Absensi Siswa<small>Administrasi sekolah</small></span>
+      </a>
+      <nav aria-label="Navigasi utama">
+        <a href="#dashboard" data-icon="dashboard">Ringkasan</a>
+        <a href="#students" data-icon="students">Data siswa</a>
+        <a href="#attendance" data-icon="check">Catat kehadiran</a>
+        <a href="#history" data-icon="history">Riwayat absensi</a>
+      <a id="accounts-link" href="#accounts" data-icon="students" hidden>Akun petugas</a>
+      </nav>
+      <div class="sidebar-note"><span class="note-rule"></span><strong>Presensi harian</strong><p>Catat kehadiran per kelas. Temukan kembali catatannya kapan saja.</p></div>
+      <div class="sidebar-account" id="account"><span class="avatar" aria-hidden="true">A</span><span>Ruang administrasi<small>Akses khusus admin</small></span></div>
+    </aside>
+    <main>
+      <header class="topbar"><span id="breadcrumb">Ruang administrasi</span><div class="topbar-right"><time id="current-date"></time><button id="logout" class="quiet" hidden>Keluar</button></div></header>
+      <div id="notice" role="status" aria-live="polite"></div>
+      <section id="view" aria-busy="true" tabindex="-1"><p class="loading">Menyiapkan ruang administrasi…</p></section>
+      <footer><span>Absensi Siswa</span><span>Zona waktu Jakarta (WIB)</span></footer>
+    </main>
+  </div>
+</body>
+</html>

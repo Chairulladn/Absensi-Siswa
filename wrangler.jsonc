@@ -1,0 +1,9 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "absensi",
+  "main": "src/index.js",
+  "compatibility_date": "2026-11-04",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {"directory": "./public", "binding": "ASSETS", "run_worker_first": true},
+  "d1_databases": [{"binding": "DB", "database_name": "absensi-siswa", "database_id": "de4e13cf-bb57-4004-b696-495cb34758d1", "migrations_dir": "migrations"}]
+}
