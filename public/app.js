@@ -12,7 +12,6 @@ const paths = {
   check: '<rect x="4" y="4" width="16" height="17" rx="2"/><path d="M8 2v4m8-4v4M8 13l3 3 5-6"/>',
   history: '<path d="M3 11a9 9 0 1 1 2.5 7M3 4v7h7m2-4v5l3 2"/>',
   search: '<circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4 4"/>',
-  plus: '<path d="M12 5v14M5 12h14"/>',
   book: '<path d="M12 5C8 2 3 4 3 4v15s5-2 9 1c4-3 9-1 9-1V4s-5-2-9 1Zm0 0v15"/>',
   tick: '<path d="m5 12 4 4L19 6"/>',
 };

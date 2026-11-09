@@ -61,7 +61,7 @@ test/
 wrangler.jsonc               Binding Workers, Static Assets, dan D1
 ```
 
-File PHP dan folder `pages/`, `includes/`, `config/`, `setup/`, serta `assets/` lama dipertahankan sebagai referensi versi PHP/MySQL. Versi Cloudflare hanya mempublikasikan frontend di `public/` dan kode Worker; tidak menjalankan PHP atau mengimpor data MySQL lama.
+Repository ini hanya berisi versi Cloudflare. Frontend berada di `public/`, backend di `src/`, dan skema database di `migrations/`. File serta aset versi PHP/MySQL lama sudah dihapus dari branch utama; versi sebelumnya tetap tersedia dalam riwayat Git. Data MySQL lama tidak diimpor ke D1.
 
 ## Menjalankan secara lokal
 

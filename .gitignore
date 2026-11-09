@@ -1,6 +1,3 @@
-# Konfigurasi database lokal
-/config/koneksi.php
-
 # File konfigurasi rahasia
 .env
 .env.*
